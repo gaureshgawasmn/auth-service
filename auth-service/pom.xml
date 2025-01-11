@@ -65,6 +65,38 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.44.0</version>
+                <configuration>
+                    <skip>false</skip>
+                    <images>
+                        <image>
+                            <name>${docker.registry.name}/${project.artifactId}</name>
+                            <build>
+                                <from>openjdk:17-jdk-slim</from>
+                                <maintainer>truxinc</maintainer>
+                                <tags>
+                                    <tag>${DOCKER_TAG}</tag>
+                                </tags>
+                                <assembly>
+                                    <descriptor>docker-assembly.xml</descriptor>
+                                </assembly>
+                                <env>
+                                </env>
+                                <cmd>
+                                    <shell>java -Denv=${ENVIRONMENT} ${JVM_MEMORY_SIZE} -server -jar /maven/${project.build.finalName}.jar</shell>
+                                </cmd>
+                            </build>
+                        </image>
+                    </images>
+                    <authConfig>
+                        <username>${DOCKER_USERNAME}</username>
+                        <password>${DOCKER_PASSWORD}</password>
+                    </authConfig>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
