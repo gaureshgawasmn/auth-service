@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
-          path: target/site/jacoco/index.html
+          path: auth-service/target/site/jacoco/index.html
 
       # Show coverage summary in PR (Optional)
       - name: Display coverage summary
