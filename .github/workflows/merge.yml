@@ -1,0 +1,18 @@
+name: Merge Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-merge-build-workflow:
+    uses: gaureshgawasmn/ci-workflows/.github/workflows/merge-build.yml@main
+    with:
+      service-name: auth-service
+      docker-registry: docker.io/gaureshgawasmn
+      environment: dev
+      jvm-memory-size: -Xmx512m
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
