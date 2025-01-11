@@ -32,18 +32,12 @@ jobs:
           name: jacoco-report
           path: auth-service/target/site/jacoco/index.html
 
-      # Show coverage summary in PR (Optional)
-      - name: Display coverage summary
-        run: |
-          coverage=$(grep -oP '(?<=<counter type="INSTRUCTION" missed="\d+" covered=")\d+' target/site/jacoco/jacoco.xml)
-          echo "Code Coverage: $coverage%"
-
       # generates coverage-report.md and publishes as checkrun
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v5.0
         with:
-          coverage_results_path: jacoco-report/test.xml
+          coverage_results_path: auth-service/target/site/jacoco/jacoco.xml
           coverage_report_name: Coverage
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
