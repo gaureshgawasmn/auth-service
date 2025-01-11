@@ -1,0 +1,1 @@
+docker run --name mysql-e-com-app -e MYSQL_USER=ecomapp -e MYSQL_PASSWORD=ecomapp -e MYSQL_DATABASE=auth  -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d arm64v8/mysql:8.0.30
