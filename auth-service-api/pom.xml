@@ -18,4 +18,11 @@
     <build>
         <finalName>auth-service-api</finalName>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+    </dependencies>
 </project>
