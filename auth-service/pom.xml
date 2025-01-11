@@ -75,12 +75,12 @@
                             <name>${docker.registry.name}/${project.artifactId}</name>
                             <build>
                                 <from>openjdk:17-jdk-slim</from>
-                                <maintainer>truxinc</maintainer>
+                                <maintainer>gaureshgawasmn</maintainer>
                                 <tags>
                                     <tag>${DOCKER_TAG}</tag>
                                 </tags>
                                 <assembly>
-                                    <descriptor>docker-assembly.xml</descriptor>
+                                    <descriptor>src/main/docker/docker-assembly.xml</descriptor>
                                 </assembly>
                                 <env>
                                 </env>
