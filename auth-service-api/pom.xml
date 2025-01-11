@@ -2,11 +2,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.techlabs</groupId>
+        <groupId>com.techlabs.service</groupId>
         <artifactId>auth-service-parent</artifactId>
-        <version>1.0.0-dev-SNAPSHOT</version>
+        <version>1.0.${revision}</version>
     </parent>
+
     <artifactId>auth-service-api</artifactId>
-    <name>Archetype - auth-service-api</name>
-    <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

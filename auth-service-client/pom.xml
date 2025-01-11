@@ -4,9 +4,33 @@
     <parent>
         <groupId>com.techlabs.service</groupId>
         <artifactId>auth-service-parent</artifactId>
-        <version>1.0.0-dev-SNAPSHOT</version>
+        <version>1.0.${revision}</version>
     </parent>
+
     <artifactId>auth-service-client</artifactId>
-    <name>Archetype - auth-service-client</name>
-    <url>http://maven.apache.org</url>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.techlabs.service</groupId>
+            <artifactId>auth-service-api</artifactId>
+            <version>1.0.${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>${retrofit2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-jackson</artifactId>
+            <version>${retrofit2.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
