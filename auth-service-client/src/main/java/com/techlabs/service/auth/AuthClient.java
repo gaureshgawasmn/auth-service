@@ -6,5 +6,5 @@ import retrofit2.http.POST;
 public interface AuthClient {
 
     @POST("/auth/authenticate")
-    boolean authenticate(@Body AuthRequest authRequest);
+    AuthUser authenticate(@Body AuthRequest authRequest);
 }

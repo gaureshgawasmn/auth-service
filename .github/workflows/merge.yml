@@ -16,3 +16,32 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy-to-maven:
+    runs-on: ubuntu-latest
+    needs: call-merge-build-workflow
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Maven and Java
+      - name: Set Up Maven and Java
+        uses: s4u/setup-maven-action@v1.12.0
+        with:
+          maven-version: '3.8.4'
+          java-version: '17'
+
+      # Set Maven username and password as environment variables
+      - name: Set up Maven secrets
+        run: echo "MAVEN_USERNAME=${{ secrets.MAVEN_USERNAME }}" >> $GITHUB_ENV
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PAT: ${{ secrets.MAVEN_PAT }}
+
+      # Build and Deploy to Maven Repository
+      - name: Build and Deploy to Maven
+        run: mvn clean deploy --settings settings.xml
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PAT: ${{ secrets.MAVEN_PAT }}

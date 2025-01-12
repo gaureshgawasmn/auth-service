@@ -1,0 +1,83 @@
+name: Pull Request Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Java and Maven
+      - name: Set Up Maven and Java
+        uses: s4u/setup-maven-action@v1.12.0
+        with:
+          maven-version: '3.8.4'
+          java-version: '17'
+
+      # Run tests and generate JaCoCo report
+      - name: Run tests with JaCoCo
+        run: mvn clean verify
+
+      # Upload JaCoCo HTML report as an artifact
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: auth-service/target/site/jacoco/index.html
+
+      # generates coverage-report.md and publishes as checkrun
+      - name: JaCoCo Code Coverage Report
+        id: jacoco_reporter
+        uses: PavanMudigonda/jacoco-reporter@v4.8
+        with:
+          coverage_results_path: auth-service/target/site/jacoco/jacoco.xml
+          coverage_report_name: Coverage
+          coverage_report_title: JaCoCo
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_check_run: false
+          minimum_coverage: 80
+          fail_below_threshold: false # handling manually at last
+          publish_only_summary: false
+
+      # Publish Coverage Job Summary  # Optional
+      - name: Add Jacocoo report to workflow run summary
+        run: |
+          echo "| Outcome | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Code Coverage % | ${{ steps.jacoco_reporter.outputs.coverage_percentage }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| :heavy_check_mark: Number of Lines Covered | ${{ steps.jacoco_reporter.outputs.covered_lines }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| :x: Number of Lines Missed | ${{ steps.jacoco_reporter.outputs.missed_lines }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Number of Lines | ${{ steps.jacoco_reporter.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
+
+      # Post a formatted comment to the PR with coverage data
+      - name: Post Code Coverage Results to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## Code Coverage Report
+            **Code Coverage Percentage**: ${{ steps.jacoco_reporter.outputs.coverage_percentage }}%
+            
+            ### Summary:
+            - :heavy_check_mark: **Lines Covered**: ${{ steps.jacoco_reporter.outputs.covered_lines }}
+            - :x: **Lines Missed**: ${{ steps.jacoco_reporter.outputs.missed_lines }}
+            - **Total Lines**: ${{ steps.jacoco_reporter.outputs.total_lines }}
+
+      - name: Check Coverage and Fail If Below Threshold
+        if: steps.jacoco_reporter.outputs.coverage_percentage < 80
+        run: |
+          echo "Code coverage is below the threshold (80%)!"
+          exit 1
