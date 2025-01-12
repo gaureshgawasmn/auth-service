@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${MY_PORT}
 
 spring:
   application:

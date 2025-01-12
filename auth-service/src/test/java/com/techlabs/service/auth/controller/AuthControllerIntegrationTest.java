@@ -1,6 +1,7 @@
 package com.techlabs.service.auth.controller;
 
 import com.techlabs.service.auth.AuthRequest;
+import com.techlabs.service.auth.AuthUser;
 import com.techlabs.service.auth.config.BaseTest;
 import com.techlabs.service.auth.entity.User;
 import com.techlabs.service.auth.repository.UserRepo;
@@ -64,7 +65,7 @@ class AuthControllerIntegrationTest extends BaseTest {
                         .content(objectMapper.writeValueAsString(authRequest)))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        User retrievedUser = objectMapper.readValue(response, User.class);
+        AuthUser retrievedUser = objectMapper.readValue(response, AuthUser.class);
         assertEquals(savedUser.getId(), retrievedUser.getId());
         assertEquals(savedUser.getEmail(), retrievedUser.getEmail());
         assertEquals(savedUser.getFirstName(), retrievedUser.getFirstName());

@@ -1,14 +1,14 @@
 package com.techlabs.service.auth;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class AuthRequest {
-    @NotNull
+    @NotBlank
     private String username;
-    @NotNull
+    @NotBlank
     private String password;
 }
